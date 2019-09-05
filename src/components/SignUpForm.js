@@ -34,8 +34,8 @@ class SignUpForm extends Component {
   render() {
     return (
       <div>
-        <h1>Sign Up</h1>
-        <Form onSubmit={e => this.handleSubmit(e)} v>
+       <label><h1>Sign Up</h1></label> 
+        <Form inverted onSubmit={e => this.handleSubmit(e)} v>
           <Form.Field required>
             <label>Email:</label>
             <input

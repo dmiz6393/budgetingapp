@@ -1,6 +1,6 @@
 import React from "react";
 import CategoryCard from "./CategoryCard";
-import { Button } from "semantic-ui-react";
+import { Button, Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { PieChart, Pie, Cell } from "recharts";
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];

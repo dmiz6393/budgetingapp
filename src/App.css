@@ -2,7 +2,7 @@
  
   background-color: #60C28C;
   left: 0;
-  margin-top: -100px;
+  margin-top: -150px;
   position: absolute;
   text-align: center;
   top: 50%;
@@ -56,5 +56,24 @@
   font-weight:normal;
 }
 
+.ui.color5.button {
+  background-color:#60C28C;
+  color: #fff;
+}
 
+body.header{
+  background: white;
+  background-size:100%; 
+  height: 100%; 
+}
 
+.header {
+  background-color: white;
+  background: cover;
+  background-size:100%; 
+  height: 100%; 
+  color: white;
+  position: fixed;
+  width: 100vw;
+  margin:0; 
+ }

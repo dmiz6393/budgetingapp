@@ -22,8 +22,9 @@ class SignInForm extends Component {
   render() {
     return (
       <div className="form-container">
-        <h1>Sign In</h1>
-        <Form onSubmit={this.handleSubmit}>
+      
+        <Form inverted onSubmit={this.handleSubmit}>
+        <label><h1>Sign In</h1></label>
           <Form.Field required>
             <label>Email:</label>
             <input
