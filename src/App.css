@@ -2,15 +2,22 @@
  
   background-color: #60C28C;
   left: 0;
-  margin-top: -150px;
-  position: absolute;
+  margin-top: 150px;
+  position: relative;
   text-align: center;
-  top: 50%;
+  top: 30%;
   width: 100%;
+  z-index: 4;
 }
 
 .form-container{
   width: 80vw;
+  margin: auto;
+ 
+}
+
+.width{
+  width: 30vw;
   margin: auto;
 }
 
@@ -77,3 +84,104 @@ body.header{
   width: 100vw;
   margin:0; 
  }
+
+ .month{
+   position: relative; 
+   z-index: 3;
+ }
+
+.container {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px;
+  width: 300px;
+  height: 300px;
+  margin:0;
+  background-color: #60C28C;
+  border-top: 0;
+}
+
+svg.recharts-surface{
+  margin-left: -100px; 
+  margin-top: -120px;
+  position: relative; 
+  margin-block-start: 0%;
+  margin-inline: 0%;
+  margin:0;
+  z-index: 0;
+}
+
+.recharts-wrapper{
+  width:300; 
+  height:300; 
+  position: relative;
+  top: -120px;
+  left: -50px;
+  
+}
+
+.left{
+  margin-left: -100px;
+}
+
+.recharts-layer{
+  margin: -100px;
+}
+.thick {
+  font-weight: bold;
+  color:white; 
+  font-size: xx-large;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+}
+
+.profile{
+  margin-top:-95px;
+}
+#dropdown{
+  font-weight: bold;
+  color:#FFDAB9; 
+}
+
+.ui.container{
+max-width: 50%;
+}
+
+.icon{
+  color:#FFDAB9; 
+  
+}
+
+.left{
+  margin-left: -100px; 
+}
+
+.pink{
+  color: #FFA078
+}
+
+.front-page{
+  margin-top: 100px; 
+  background-color: white; 
+  position: relative;
+  z-index: 3;
+}
+
+.account{
+  position: relative;
+  margin: 0;
+  z-index: 3;
+  left: -115px;
+
+}
+
+.settings{
+  position: relative;
+  margin-top:0px;
+  left: 9px;
+}
+
+.menu{
+  size: mini; 
+}

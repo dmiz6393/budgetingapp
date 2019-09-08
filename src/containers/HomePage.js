@@ -6,10 +6,12 @@ class HomePage extends Component {
   render() {
     return (
      
-      <div className="header">
+      <div className="header front-page">
+         <h1></h1>
          <img src={background} alt="background"/>
          <button class="ui color5 button" onClick={() => (window.location = "/signin")}>Sign In</button>
         <button class="ui color5 button" onClick={() => (window.location = "/signup")}>Sign Up</button>
+      <h1></h1>
       </div>
      
     );
