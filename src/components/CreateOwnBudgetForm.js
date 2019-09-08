@@ -24,8 +24,9 @@ class CreateOwnBudgetForm extends Component {
   render() {
     return (
       <div className="form-container">
+        <div></div>
         <Form inverted onSubmit={e => this.props.setBudget(e, this.state.budget)}>
-          <label><h1 className="icon">How much would you like to save each month?</h1></label>
+          <label><h1 className="icon">How much would you like to spend each month?</h1></label>
           <h5> </h5>
           <input onChange={this.submitButton} name="budget" type="number" />
           <h5> </h5>
@@ -34,22 +35,6 @@ class CreateOwnBudgetForm extends Component {
           </Button>
         </Form>
         <div>
-        {this.state.showNext && this.props.existingUser ? (
-          <Button>
-            <Link to="/profile"> My Profile</Link>
-          </Button>
-        ) : (
-          <div></div>
-        )}
-
-        {this.state.showNext && this.props.newUser ? (
-          <Button>
-            {" "}
-            <Link to="/expenses">My Expenses </Link>
-          </Button>) 
-          :(<div></div>)
-        }
-        
         </div>
       </div>
     );

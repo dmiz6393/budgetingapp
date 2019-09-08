@@ -27,13 +27,14 @@ class ExpenseCardNew extends Component {
   };
 
   handleSubmit = (event) => {
-
-   debugger 
+    this.props.editCategory(event,this.props.category) 
+    this.setState({ showExpenseForm: false });
   };
+
 
   render() {
     return (
-      <div>
+      <div className="font icon">
         <List divided verticalAlign="middle">
           <List.Item>
             <List.Content className="icon" floated="right">
@@ -43,8 +44,6 @@ class ExpenseCardNew extends Component {
               null : <Button onClick={this.handleClick}> Edit</Button>}
             </List.Content>
             {this.state.showExpenseForm ? (
-              //   <List.Content className="icon" floated="right">
-              //     {" "}
               <form onSubmit={this.handleSubmit}>
                 {" "}
                 <input
@@ -56,7 +55,7 @@ class ExpenseCardNew extends Component {
                 <Button> Submit</Button>
               </form>
             ) : (
-              //   </List.Content>
+          
               <List.Content>
                 {this.props.category.name} {this.getExpenses()}
               </List.Content>

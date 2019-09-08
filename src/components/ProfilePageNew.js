@@ -5,7 +5,6 @@ import {
   Menu,
   Container,
   Divider,
-  Form,
   Grid,
   Segment,
   List,
@@ -13,7 +12,6 @@ import {
 } from "semantic-ui-react";
 import {
   BrowserRouter as Router,
-  Route,
   Redirect,
   withRouter
 } from "react-router-dom";

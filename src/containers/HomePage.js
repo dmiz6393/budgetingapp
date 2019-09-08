@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Button, Grid } from "semantic-ui-react";
 import background from "./budgey.png" 
 
 class HomePage extends Component {

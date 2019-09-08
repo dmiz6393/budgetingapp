@@ -8,15 +8,11 @@ import {
   Redirect,
   withRouter
 } from "react-router-dom";
-import { Button } from "semantic-ui-react";
 import SignInForm from "./components/SignInForm";
 import SignUpForm from "./components/SignUpForm";
 import HomePage from "./containers/HomePage";
-import WelcomePage from "./components/WelcomePage";
 import BudgetCalculator from "./components/BudgetCalculator";
 import CreateOwnBudgetForm from "./components/CreateOwnBudgetForm";
-import BudgetDropDown from "./components/BudgetDropDown";
-import ProfilePage from "./components/ProfilePage";
 import EditIncome from "./components/EditIncome";
 import ProfilePageNew from "./components/ProfilePageNew";
 import BudgetOptionsPage from "./components/BudgetOptionsPage";
@@ -32,13 +28,10 @@ const year = now.getFullYear();
 class App extends Component {
   state = {
     user: null,
-    showSignIn: false,
-    showSignUp: false,
     redirectSignIn: false,
     redirectSignUp: false,
     loggedOut: false,
     categories: [],
-    showCostDropDown: false,
     date: null,
     dateNum: null,
     existingUser: false,
@@ -96,7 +89,7 @@ class App extends Component {
         redirectSignIn: true,
         existingUser: true,
         budgetFilled: user.budget !== 0 ? true : false,
-        expensesFilled: user.categories !== Array(0) ? true : false
+        expensesFilled: user.categories.length !== 0 ? true : false
       })
     );
   };
@@ -151,13 +144,6 @@ class App extends Component {
       );
   };
 
-  changeState = () => {
-    this.setState({
-      showCostDropDown: false
-    });
-  };
-  //when I set the budget again, user.id and userid
-
   renderRedirectSignIn = () => {
     if (this.state.redirectSignIn) {
       return <Redirect to="/newprofile" />;
@@ -182,19 +168,8 @@ class App extends Component {
     this.props.history.push(`/`);
   };
 
-  showSigninClick = () => {
-    this.setState({
-      showSignIn: !this.state.showSignIn
-    });
-  };
-
-  showSignUpClick = () => {
-    this.setState({
-      showSignUp: !this.state.showSignUp
-    });
-  };
-
   setBudget = (e, budget) => {
+ 
     e.preventDefault();
     fetch(
       usersUrl +
@@ -220,33 +195,11 @@ class App extends Component {
       .then(
         this.setState({
           budgetFilled: true,
-          expensesFilled: this.state.user.categories !== 0 ? true : false
+          expensesFilled: this.state.user.categories.length !==0 ? true : false
         })
       )
       .then(this.props.history.push(`/newprofile`));
   };
-
-  // handleSubmitCategory = (event, value) => {
-  //   event.preventDefault();
-  //   fetch(categoriesUrl, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify({
-  //       name: value,
-  //       user_id: this.state.user.user_id
-  //     })
-  //   })
-  //     .then(response => response.json())
-  //     .then(res =>
-  //       this.setState({
-  //         categories: [...this.state.categories, res],
-  //         showCostDropDown: true,
-  //         existingUser: true
-  //       })
-  //     );
-  // };
 
   handleSubmitCategory = (event, category, expense) => {
     event.preventDefault();
@@ -262,37 +215,6 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(res => this.setCategoryCost(res, expense));
-
-    //   )
-    // .then(res =>
-    //   this.setState({
-    //     categories: [...this.state.categories, res],
-    //     showCostDropDown: true,
-    //     existingUser: true
-    //   })
-    // );
-  };
-
-  handleOwnSubmitCategory = event => {
-    event.preventDefault();
-
-    fetch(categoriesUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name: event.target.expense.value,
-        user_id: this.state.user.user_id
-      })
-    })
-      .then(response => response.json())
-      .then(res =>
-        this.setState({
-          categories: [...this.state.categories, res],
-          showCostDropDown: true
-        })
-      ); // parses JSON response into native JavaScript objects
   };
 
   setCategoryCost = (res, expense) => {
@@ -361,22 +283,33 @@ class App extends Component {
       .then(() => this.fetchUserInfo());
   };
 
-  //updating income changes my budget
+  editCategory = (event, category) => {
+    event.preventDefault();
+    const expense= event.target.amount.value 
+    fetch(categoriesUrl + "/" + `${category.id}`, {
+      method: "PATCH", 
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name: event.target.category.value }) 
+    })
+      .then(response => response.json())
+      .then(res => this.editExpenseAmount(res,expense)); 
+  };
 
-  addExpenses = (e, category) => {
-    e.preventDefault();
-    fetch(expensesUrl + "/" + `${category.expenses[0].id}`, {
-      method: "PATCH",
+  editExpenseAmount = (res,expense) => {
+    fetch(expensesUrl + "/" + `${res.expenses[0].id}`, {
+      method: "PATCH", 
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        category_id: category.id,
-        amount: Number(category.expenses[0].amount) + Number(e.target.exp.value)
-      })
+        amount: Number(expense),
+        category_id: res.id
+      }) 
     })
       .then(response => response.json())
-      .then(() => this.fetchUserInfo());
+      .then(this.fetchUserInfo()); // parses JSON response into native JavaScript objects
   };
 
   render() {
@@ -409,20 +342,13 @@ class App extends Component {
           path="/signin"
           render={() => <SignInForm submitSignIn={this.submitSignIn} />}
         />
-        <Route
-          exact
-          path="/welcome"
-          render={() => (
-            <WelcomePage logOut={this.logOut} user={this.state.user} />
-          )}
-        />
+      
         <Route
           exact
           path="/budget"
           render={() => (
             <BudgetCalculator
               setBudget={this.setBudget}
-              logOut={this.logOut}
               user={this.state.user}
               existingUser={this.state.existingUser}
               newUser={this.state.newUser}
@@ -436,7 +362,6 @@ class App extends Component {
           render={() => (
             <CreateOwnBudgetForm
               setBudget={this.setBudget}
-              logOut={this.logOut}
               user={this.state.user}
               fetchUserInfo={this.state.fetchUserInfo}
               existingUser={this.state.existingUser}
@@ -445,37 +370,6 @@ class App extends Component {
           )}
         />
 
-        <Route
-          exact
-          path="/expenses"
-          render={() => (
-            <BudgetDropDown
-              handleOwnSubmitCategory={this.handleOwnSubmitCategory}
-              handleSubmitCategory={this.handleSubmitCategory}
-              categories={this.state.categories}
-              showCostDropDown={this.state.showCostDropDown}
-              setCategoryCost={this.setCategoryCost}
-              fetchUserInfo={this.fetchUserInfo}
-            />
-          )}
-        />
-
-        <Route
-          exact
-          path="/profile"
-          render={() => (
-            <ProfilePage
-              logOut={this.logOut}
-              dateNum={this.state.dateNum}
-              date={this.state.date}
-              user={this.state.user}
-              changeDate={this.changeDate}
-              deleteAccount={this.deleteAccount}
-              changeState={this.changeState}
-              addExpenses={this.addExpenses}
-            />
-          )}
-        />
 
         <Route
           exact
@@ -504,6 +398,7 @@ class App extends Component {
               existingUser={this.state.existingUser}
               budgetFilled={this.state.budgetFilled}
               expensesFilled={this.state.expensesFilled}
+              editCategory={this.editCategory}
             />
           )}
         />
