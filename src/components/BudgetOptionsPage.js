@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import BudgetCalculator from "./BudgetCalculator";
 import {Icon, Divider} from "semantic-ui-react";
 
 import { BrowserRouter as Router, Link, withRouter } from "react-router-dom";

@@ -27,11 +27,14 @@ class BudgetCalculator extends Component {
   budgetCalculator = () => {
     const monthlySalary = parseInt(this.props.user.income) / 12;
     const budget = monthlySalary - this.state.save;
-    budget<0 ? alert("You aren't making enough to save that amount, please set a new goal"):   
-    this.setState({
-      showBudget: true,
-      budget: budget
-    });
+    budget < 0
+      ? alert(
+          "You aren't making enough to save that amount, please set a new goal"
+        )
+      : this.setState({
+          showBudget: true,
+          budget: budget
+        });
   };
 
   handleClick = e => {
@@ -46,7 +49,7 @@ class BudgetCalculator extends Component {
       <Container>
         <Form inverted onSubmit={this.handleChange}>
           <Form.Field widths="equal">
-            <Form.Input 
+            <Form.Input
               fluid
               label="How much would you like to save?"
               name="goal"
@@ -83,37 +86,14 @@ class BudgetCalculator extends Component {
               To save this, your monthly budget should be {this.state.budget}
             </h1>{" "}
             <Button onClick={this.handleClick}>Set this as my budget</Button>{" "}
-            {this.state.showArrow && this.props.newUser ? (
-              <div>
-                <NavLink to="/expenses">
-                  <Icon className="angle double right icon huge inverted"/>
-                </NavLink>
-              </div>
-            ) : (
-              <NavLink to="/budgetform">
-              <Button>
-                Create my own budget
-              </Button>
-              </NavLink>
-            )}
+            <NavLink to="/budgetform">
+              <Button>Create my own budget</Button>
+            </NavLink>
           </>
         ) : null}
-
-        {this.props.existingUser ? (
-              <NavLink to="/profile">
-              <Button>
-               Back to my profile
-              </Button>
-              </NavLink>
-            ): null}
       </Container>
     );
   }
 }
 
 export default BudgetCalculator;
-
-//what is your savings goal?
-// how old are you now?
-// what age would you like to have this saved by?
-//Would you like to set this as your budget? <select> <option> Yes </option> <option> No </option>  </select>

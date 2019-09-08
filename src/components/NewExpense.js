@@ -97,9 +97,6 @@ class NewExpense extends Component {
         
     }
 
-    handleSubmit=()=>{
-     console.log(this.state)
-    }
 
     formFieldChange=(event)=>{
         this.setState({
