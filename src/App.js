@@ -18,7 +18,7 @@ import ProfilePageNew from "./components/ProfilePageNew";
 import BudgetOptionsPage from "./components/BudgetOptionsPage";
 import NewExpense from "./components/NewExpense";
 import SettingPage from "./components/SettingPage";
-
+import ExpenseInput from "./components/ExpenseInput";
 const usersUrl = "http://localhost:3000/api/v1/users";
 const categoriesUrl = "http://localhost:3000/api/v1/categories";
 const expensesUrl = "http://localhost:3000/api/v1/expenses";
@@ -30,12 +30,9 @@ class App extends Component {
     user: null,
     redirectSignIn: false,
     redirectSignUp: false,
-    loggedOut: false,
     categories: [],
     date: null,
     dateNum: null,
-    existingUser: false,
-    newUser: false,
     budgetFilled: false,
     expensesFilled: false
   };
@@ -69,8 +66,7 @@ class App extends Component {
           last_name: user.last_name,
           income: user.income
         },
-        redirectSignUp: true,
-        newUser: true
+        redirectSignUp: true
       });
     });
   };
@@ -87,7 +83,6 @@ class App extends Component {
           categories: user.categories
         },
         redirectSignIn: true,
-        existingUser: true,
         budgetFilled: user.budget !== 0 ? true : false,
         expensesFilled: user.categories.length !== 0 ? true : false
       })
@@ -169,7 +164,6 @@ class App extends Component {
   };
 
   setBudget = (e, budget) => {
- 
     e.preventDefault();
     fetch(
       usersUrl +
@@ -195,7 +189,7 @@ class App extends Component {
       .then(
         this.setState({
           budgetFilled: true,
-          expensesFilled: this.state.user.categories.length !==0 ? true : false
+          expensesFilled: this.state.user.categories.length !== 0 ? true : false
         })
       )
       .then(this.props.history.push(`/newprofile`));
@@ -285,32 +279,39 @@ class App extends Component {
 
   editCategory = (event, category) => {
     event.preventDefault();
-    const expense= event.target.amount.value 
+    const expense = event.target.amount.value;
     fetch(categoriesUrl + "/" + `${category.id}`, {
-      method: "PATCH", 
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ name: event.target.category.value }) 
+      body: JSON.stringify({ name: event.target.category.value })
     })
       .then(response => response.json())
-      .then(res => this.editExpenseAmount(res,expense)); 
+      .then(res => this.editExpenseAmount(res, expense));
   };
 
-  editExpenseAmount = (res,expense) => {
+  editExpenseAmount = (res, expense) => {
     fetch(expensesUrl + "/" + `${res.expenses[0].id}`, {
-      method: "PATCH", 
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
         amount: Number(expense),
         category_id: res.id
-      }) 
+      })
     })
       .then(response => response.json())
-      .then(this.fetchUserInfo()); // parses JSON response into native JavaScript objects
+      .then(this.fetchUserInfo());
   };
+
+  deleteExpense=(e,category)=>{
+    fetch(categoriesUrl + "/" + `${category.id}`, {
+      method: "DELETE"
+    }).then(this.fetchUserInfo());
+  };
+  
 
   render() {
     return (
@@ -342,7 +343,7 @@ class App extends Component {
           path="/signin"
           render={() => <SignInForm submitSignIn={this.submitSignIn} />}
         />
-      
+
         <Route
           exact
           path="/budget"
@@ -364,12 +365,10 @@ class App extends Component {
               setBudget={this.setBudget}
               user={this.state.user}
               fetchUserInfo={this.state.fetchUserInfo}
-              existingUser={this.state.existingUser}
               newUser={this.state.newUser}
             />
           )}
         />
-
 
         <Route
           exact
@@ -378,7 +377,6 @@ class App extends Component {
             <EditIncome
               updateIncome={this.updateIncome}
               user={this.state.user}
-              fetchUserInfo={this.fetchUserInfo}
             />
           )}
         />
@@ -393,12 +391,10 @@ class App extends Component {
               date={this.state.date}
               user={this.state.user}
               changeDate={this.changeDate}
-              changeState={this.changeState}
-              addExpenses={this.addExpenses}
-              existingUser={this.state.existingUser}
               budgetFilled={this.state.budgetFilled}
               expensesFilled={this.state.expensesFilled}
               editCategory={this.editCategory}
+              deleteExpense={this.deleteExpense}
             />
           )}
         />
@@ -420,6 +416,14 @@ class App extends Component {
           path="/newexpense"
           render={() => (
             <NewExpense handleSubmitCategory={this.handleSubmitCategory} />
+          )}
+        />
+
+        <Route
+          exact
+          path="/mycategory"
+          render={() => (
+            <ExpenseInput handleSubmitCategory={this.handleSubmitCategory} />
           )}
         />
       </div>

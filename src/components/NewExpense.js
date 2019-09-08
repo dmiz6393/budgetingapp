@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Dropdown, Form } from 'semantic-ui-react'
+import {Link} from "react-router-dom"
 import bus from "../Icons/bus.jpg"
 import bills from "../Icons/bills.jpg"
 import education from "../Icons/education.jpg"
@@ -123,6 +124,7 @@ class NewExpense extends Component {
                   </div>
        <Dropdown onChange={(e)=>this.handleChangeDropDown(e,expenseOptions)} placeholder= "Select Expense" 
        fluid selection options={expenseOptions} /> 
+     <h1 className="icon"> Don't see what you're looking for? Add your own category <Link to= "/mycategory" > here </Link> </h1>
         <Form.Button inverted> Submit </Form.Button>
        </Form>
         </div>

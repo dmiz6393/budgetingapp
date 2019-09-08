@@ -1,39 +1,24 @@
 import React, { Component } from "react";
-
-import { BrowserRouter as Router, Link, withRouter } from "react-router-dom";
-import { Button } from "semantic-ui-react"; 
+import { Button,Form } from "semantic-ui-react"; 
+import {
+  BrowserRouter as Router,
+  withRouter
+} from "react-router-dom";
 
 class EditIncome extends Component {
-//   state = {
-//     income: 0
-//   };
-
-//   submitButton = event => {
-//     event.preventDefault();
-//     this.setState({
-//       income: event.target.value
-//     });
-//   };
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.props.updateIncome}>
-          <input name="income" type="text" />
-          <input type="submit" />
-        </form>
-        <Button onClick={this.props.fetchUserInfo}>
-            Done for now 
-          </Button>
-
-        <Link to ="/profile">
-          <Button>
-            Next
-          </Button>
-          </Link>
+      <div className="form-container">
+        <h1 className="icon"> Type your new income below</h1>
+        <Form onSubmit={this.props.updateIncome}>
+          <input name="income" type="number" placeholder="$"  />
+          <h3> </h3>
+          <Button type="submit" > Submit</Button> 
+        </Form>
       </div>
     );
   }
 }
 
-export default EditIncome;
+export default withRouter(EditIncome)

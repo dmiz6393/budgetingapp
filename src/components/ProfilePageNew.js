@@ -8,7 +8,7 @@ import {
   Grid,
   Segment,
   List,
-  Button, Icon, Dropdown
+  Button, Icon
 } from "semantic-ui-react";
 import {
   BrowserRouter as Router,
@@ -103,6 +103,7 @@ class ProfilePageNew extends React.Component {
                   addExpenses={this.props.addExpenses}
                   category={category}
                   editCategory={this.props.editCategory}
+                  deleteExpense={this.props.deleteExpense}
                 />
               );
             });

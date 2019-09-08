@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Button, Container, Icon } from "semantic-ui-react";
+import { Form, Button, Container } from "semantic-ui-react";
 
 import { BrowserRouter as Link, NavLink } from "react-router-dom";
 
@@ -20,7 +20,7 @@ class BudgetCalculator extends Component {
     const perMonth = perYear / 12;
     this.setState({
       showSaving: true,
-      save: perMonth
+      save: perMonth.toFixed(2)
     });
   };
 
@@ -33,7 +33,7 @@ class BudgetCalculator extends Component {
         )
       : this.setState({
           showBudget: true,
-          budget: budget
+          budget: budget.toFixed(2)
         });
   };
 

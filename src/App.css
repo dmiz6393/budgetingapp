@@ -190,3 +190,7 @@ max-width: 50%;
 .font{
   font-family: 'Cantarell', sans-serif;
 }
+
+a{
+  color: white
+}

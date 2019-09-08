@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { List, Button, Form } from "semantic-ui-react";
+import { List, Button} from "semantic-ui-react";
 
 import {
   BrowserRouter as Router,
@@ -38,7 +38,7 @@ class ExpenseCardNew extends Component {
         <List divided verticalAlign="middle">
           <List.Item>
             <List.Content className="icon" floated="right">
-            {this.state.showExpenseForm ?  null : <Button>Add</Button>}
+            {this.state.showExpenseForm ?  null : <Button onClick={(e)=>this.props.deleteExpense(e,this.props.category)}>Delete</Button>}
 
               {this.state.showExpenseForm ? 
               null : <Button onClick={this.handleClick}> Edit</Button>}
