@@ -33,7 +33,7 @@ const renderCustomizedLabel = ({
 };
 
 class ProfilePage extends React.Component {
-  calculateAmountToGoal = () => {};
+ 
   totalAmount = () => {
     const amountArray = this.props.user.categories.map(
       category => category.expenses
@@ -53,12 +53,6 @@ class ProfilePage extends React.Component {
     const sum = newNew.reduce((a, b) => a + b, 0);
     return sum;
   };
-
-//   filteredCategories = () => {
-//     const filteredCategory = this.props.user.categories.filter(category => {
-//       return category.expenses[0].created_at.includes(this.props.dateNum);
-//     });
-//   };
 
   render() {
     const data = [
@@ -101,8 +95,8 @@ class ProfilePage extends React.Component {
           <div>
             <select onChange={this.props.changeDate} id="gMonth1">
               <option value="">--Select Month--</option>
-              <option name="Janaury" value="1">
-                Janaury
+              <option name="January" value="1">
+                January
               </option>
               <option name="February" value="2">
                 February

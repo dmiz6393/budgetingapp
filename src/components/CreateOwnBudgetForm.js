@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Link } from "react-router-dom";
-import { Button } from "semantic-ui-react";
+import { Button, Form } from "semantic-ui-react";
 
 class CreateOwnBudgetForm extends Component {
   state = {
@@ -23,13 +23,16 @@ class CreateOwnBudgetForm extends Component {
 
   render() {
     return (
-      <div>
-        <form onSubmit={e => this.props.setBudget(e, this.state.budget)}>
+      <div className="form-container">
+        <Form inverted onSubmit={e => this.props.setBudget(e, this.state.budget)}>
+          <label><h1 className="icon">How much would you like to save each month?</h1></label>
+          <h5> </h5>
           <input onChange={this.submitButton} name="budget" type="number" />
-          <Button >
-            <input onClick={this.showNxt} type="submit" />
+          <h5> </h5>
+          <Button onClick={this.showNxt}  inverted color="grey" type="submit" >
+            Submit
           </Button>
-        </form>
+        </Form>
         <div>
         {this.state.showNext && this.props.existingUser ? (
           <Button>

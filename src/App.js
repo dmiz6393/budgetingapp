@@ -18,6 +18,10 @@ import CreateOwnBudgetForm from "./components/CreateOwnBudgetForm";
 import BudgetDropDown from "./components/BudgetDropDown";
 import ProfilePage from "./components/ProfilePage";
 import EditIncome from "./components/EditIncome";
+import ProfilePageNew from "./components/ProfilePageNew";
+import BudgetOptionsPage from "./components/BudgetOptionsPage";
+import NewExpense from "./components/NewExpense";
+import SettingPage from "./components/SettingPage";
 
 const usersUrl = "http://localhost:3000/api/v1/users";
 const categoriesUrl = "http://localhost:3000/api/v1/categories";
@@ -37,20 +41,25 @@ class App extends Component {
     showCostDropDown: false,
     date: null,
     dateNum: null,
-    existingUser: false, 
-    newUser: false 
+    existingUser: false,
+    newUser: false,
+    budgetFilled: false,
+    expensesFilled: false
   };
 
   componentDidMount() {
     this.getMonth();
     API.validateUser().then(user => {
+      console.log(user);
       if (user.user) {
         this.setState({
           user: {
-            email: user.email,
-            user_id: user.id,
-            income: user.income,
-            first_name: user.first_name
+            email: user.user.email,
+            user_id: user.user.id,
+            income: user.user.income,
+            first_name: user.user.first_name,
+            categories: user.user.categories,
+            budget: user.user.budget
           }
         });
       }
@@ -65,10 +74,10 @@ class App extends Component {
           user_id: user.id,
           first_name: user.first_name,
           last_name: user.last_name,
-          income: user.income,
+          income: user.income
         },
-        redirectSignUp: true, 
-        newUser: true 
+        redirectSignUp: true,
+        newUser: true
       });
     });
   };
@@ -85,7 +94,9 @@ class App extends Component {
           categories: user.categories
         },
         redirectSignIn: true,
-        existingUser: true
+        existingUser: true,
+        budgetFilled: user.budget !== 0 ? true : false,
+        expensesFilled: user.categories !== Array(0) ? true : false
       })
     );
   };
@@ -149,13 +160,13 @@ class App extends Component {
 
   renderRedirectSignIn = () => {
     if (this.state.redirectSignIn) {
-      return <Redirect to="/profile" />;
+      return <Redirect to="/newprofile" />;
     }
   };
 
   renderRedirectSignUp = () => {
     if (this.state.redirectSignUp) {
-      return <Redirect to="/welcome" />;
+      return <Redirect to="/newprofile" />;
     }
   };
 
@@ -203,10 +214,41 @@ class App extends Component {
           budget: budget
         })
       }
-    ).then(response => response.json()).then(()=>this.fetchUserInfo())
+    )
+      .then(response => response.json())
+      .then(() => this.fetchUserInfo())
+      .then(
+        this.setState({
+          budgetFilled: true,
+          expensesFilled: this.state.user.categories !== 0 ? true : false
+        })
+      )
+      .then(this.props.history.push(`/newprofile`));
   };
 
-  handleSubmitCategory = (event, value) => {
+  // handleSubmitCategory = (event, value) => {
+  //   event.preventDefault();
+  //   fetch(categoriesUrl, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify({
+  //       name: value,
+  //       user_id: this.state.user.user_id
+  //     })
+  //   })
+  //     .then(response => response.json())
+  //     .then(res =>
+  //       this.setState({
+  //         categories: [...this.state.categories, res],
+  //         showCostDropDown: true,
+  //         existingUser: true
+  //       })
+  //     );
+  // };
+
+  handleSubmitCategory = (event, category, expense) => {
     event.preventDefault();
     fetch(categoriesUrl, {
       method: "POST",
@@ -214,32 +256,35 @@ class App extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        name: value,
+        name: category,
         user_id: this.state.user.user_id
       })
     })
       .then(response => response.json())
-      .then(res =>
-        this.setState({
-          categories: [...this.state.categories, res],
-          showCostDropDown: true, 
-          existingUser: true 
-        })
-      );
+      .then(res => this.setCategoryCost(res, expense));
+
+    //   )
+    // .then(res =>
+    //   this.setState({
+    //     categories: [...this.state.categories, res],
+    //     showCostDropDown: true,
+    //     existingUser: true
+    //   })
+    // );
   };
 
   handleOwnSubmitCategory = event => {
     event.preventDefault();
 
     fetch(categoriesUrl, {
-      method: "POST", 
+      method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
         name: event.target.expense.value,
         user_id: this.state.user.user_id
-      }) 
+      })
     })
       .then(response => response.json())
       .then(res =>
@@ -250,18 +295,29 @@ class App extends Component {
       ); // parses JSON response into native JavaScript objects
   };
 
-  setCategoryCost = (e, category) => {
-    e.preventDefault();
+  setCategoryCost = (res, expense) => {
     fetch(expensesUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        amount: e.target.cost.value,
-        category_id: category.id
+        amount: expense,
+        category_id: res.id
       })
-    }).then(response => response.json());
+    })
+      .then(response => response.json())
+      .then(this.fetchUserInfo())
+      .then(() => {
+        this.renderProfile();
+      });
+  };
+
+  renderProfile = () => {
+    this.setState({
+      expensesFilled: true
+    });
+    this.props.history.push("/newprofile");
   };
 
   deleteAccount = () => {
@@ -300,8 +356,9 @@ class App extends Component {
           budget: this.state.user.budget
         })
       }
-    ).then(response => response.json())
-    .then(()=>this.fetchUserInfo())
+    )
+      .then(response => response.json())
+      .then(() => this.fetchUserInfo());
   };
 
   //updating income changes my budget
@@ -317,7 +374,9 @@ class App extends Component {
         category_id: category.id,
         amount: Number(category.expenses[0].amount) + Number(e.target.exp.value)
       })
-    }).then(response => response.json()).then(()=>this.fetchUserInfo())
+    })
+      .then(response => response.json())
+      .then(() => this.fetchUserInfo());
   };
 
   render() {
@@ -427,6 +486,45 @@ class App extends Component {
               user={this.state.user}
               fetchUserInfo={this.fetchUserInfo}
             />
+          )}
+        />
+
+        <Route
+          exact
+          path="/newprofile"
+          render={() => (
+            <ProfilePageNew
+              logOut={this.logOut}
+              dateNum={this.state.dateNum}
+              date={this.state.date}
+              user={this.state.user}
+              changeDate={this.changeDate}
+              changeState={this.changeState}
+              addExpenses={this.addExpenses}
+              existingUser={this.state.existingUser}
+              budgetFilled={this.state.budgetFilled}
+              expensesFilled={this.state.expensesFilled}
+            />
+          )}
+        />
+
+        <Route
+          exact
+          path="/budgetoptions"
+          render={() => <BudgetOptionsPage />}
+        />
+
+        <Route
+          exact
+          path="/settings"
+          render={() => <SettingPage deleteAccount={this.deleteAccount} />}
+        />
+
+        <Route
+          exact
+          path="/newexpense"
+          render={() => (
+            <NewExpense handleSubmitCategory={this.handleSubmitCategory} />
           )}
         />
       </div>

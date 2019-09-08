@@ -42,12 +42,11 @@ class BudgetCalculator extends Component {
   };
 
   render() {
-    // this.budgetCalculator()
     return (
       <Container>
-        <Form onSubmit={this.handleChange}>
+        <Form inverted onSubmit={this.handleChange}>
           <Form.Field widths="equal">
-            <Form.Input
+            <Form.Input 
               fluid
               label="How much would you like to save?"
               name="goal"
