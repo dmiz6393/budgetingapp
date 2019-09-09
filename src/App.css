@@ -194,3 +194,15 @@ max-width: 50%;
 a{
   color: white
 }
+
+.progress-bar{
+  position: relative;
+  height: 20px;
+  width: 350px; 
+  border-radius: 50px; 
+  border: 1px solid  #FFA078
+}
+
+.bar{
+  background: #FFA078;
+}

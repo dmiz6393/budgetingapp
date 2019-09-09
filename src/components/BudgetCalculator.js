@@ -14,6 +14,7 @@ class BudgetCalculator extends Component {
 
   handleChange = event => {
     event.preventDefault();
+    this.props.saveGoal(event)
     const years = event.target.older.value - event.target.age.value;
     const goal = event.target.goal.value;
     const perYear = goal / years;

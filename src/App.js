@@ -19,6 +19,7 @@ import BudgetOptionsPage from "./components/BudgetOptionsPage";
 import NewExpense from "./components/NewExpense";
 import SettingPage from "./components/SettingPage";
 import ExpenseInput from "./components/ExpenseInput";
+import InsightsPage from "./components/InsightsPage";
 const usersUrl = "http://localhost:3000/api/v1/users";
 const categoriesUrl = "http://localhost:3000/api/v1/categories";
 const expensesUrl = "http://localhost:3000/api/v1/expenses";
@@ -49,7 +50,8 @@ class App extends Component {
             income: user.user.income,
             first_name: user.user.first_name,
             categories: user.user.categories,
-            budget: user.user.budget
+            budget: user.user.budget,
+            goals: user.user.goals
           }
         });
       }
@@ -80,7 +82,8 @@ class App extends Component {
           user_id: user.id,
           income: user.income,
           budget: user.budget,
-          categories: user.categories
+          categories: user.categories,
+          goals: user.goals
         },
         redirectSignIn: true,
         budgetFilled: user.budget !== 0 ? true : false,
@@ -114,7 +117,7 @@ class App extends Component {
     });
   };
 
-  fetchUserInfo = () => {
+  fetchUserInfo = (callback = () => {}) => {
     fetch(
       usersUrl +
         "/" +
@@ -125,18 +128,25 @@ class App extends Component {
         }`
     )
       .then(response => response.json())
-      .then(res =>
-        this.setState({
-          user: {
-            first_name: res.first_name,
-            email: res.email,
-            user_id: res.id,
-            income: res.income,
-            budget: res.budget,
-            categories: res.categories
-          }
-        })
-      );
+      .then(res => {
+        // debugger;
+        this.setState(
+          {
+            user: {
+              first_name: res.first_name,
+              email: res.email,
+              user_id: res.id,
+              income: res.income,
+              budget: res.budget,
+              categories: res.categories,
+              goals: res.goals
+            }, 
+            budgetFilled: res.budget !== 0 ? true : false,
+            expensesFilled: res.categories.length !== 0 ? true : false
+          },
+          callback()
+        );
+      });
   };
 
   renderRedirectSignIn = () => {
@@ -180,7 +190,8 @@ class App extends Component {
         },
         body: JSON.stringify({
           income: this.state.user.income,
-          budget: budget
+          budget: budget,
+          goals: this.state.user.goals
         })
       }
     )
@@ -192,7 +203,7 @@ class App extends Component {
           expensesFilled: this.state.user.categories.length !== 0 ? true : false
         })
       )
-      .then(this.props.history.push(`/newprofile`));
+      .then(() => this.props.history.push(`/newprofile`));
   };
 
   handleSubmitCategory = (event, category, expense) => {
@@ -223,17 +234,16 @@ class App extends Component {
       })
     })
       .then(response => response.json())
-      .then(this.fetchUserInfo())
-      .then(() => {
-        this.renderProfile();
-      });
+      .then(() => this.fetchUserInfo(this.renderProfile));
   };
 
   renderProfile = () => {
-    this.setState({
-      expensesFilled: true
-    });
-    this.props.history.push("/newprofile");
+    this.setState(
+      {
+        expensesFilled: true
+      },
+      () => this.props.history.push("/newprofile")
+    );
   };
 
   deleteAccount = () => {
@@ -269,12 +279,16 @@ class App extends Component {
         },
         body: JSON.stringify({
           income: Number(e.target.income.value),
-          budget: this.state.user.budget
+          budget: this.state.user.budget,
+          goals: this.state.user.goals,
+          budgetFilled: this.state.user.budget !== 0 ? true : false,
+          expensesFilled: this.state.user.categories.length !== 0 ? true : false
         })
       }
     )
       .then(response => response.json())
-      .then(() => this.fetchUserInfo());
+      .then(() => this.fetchUserInfo())
+      .then(() => this.props.history.push(`/newprofile`));
   };
 
   editCategory = (event, category) => {
@@ -303,15 +317,64 @@ class App extends Component {
       })
     })
       .then(response => response.json())
-      .then(this.fetchUserInfo());
+      .then(() => this.fetchUserInfo());
   };
 
-  deleteExpense=(e,category)=>{
+  deleteExpense = (e, category) => {
     fetch(categoriesUrl + "/" + `${category.id}`, {
       method: "DELETE"
-    }).then(this.fetchUserInfo());
+    }).then(() => this.fetchUserInfo(this.renderProfile));
   };
-  
+
+  saveGoal = event => {
+    return fetch(
+      usersUrl +
+        "/" +
+        `${
+          this.state.user.user_id !== undefined
+            ? this.state.user.user_id
+            : this.state.user.id
+        }`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          income: this.state.user.income,
+          budget: this.state.user.budget,
+          goals: Number(event.target.goal.value),
+        })
+      }
+    )
+      .then(response => response.json())
+      .then(() => this.fetchUserInfo());
+  };
+
+  totalAmount = () => {
+    if (this.state.expensesFilled == true) {
+      const amountArray = this.state.user.categories.map(
+        category => category.expenses
+      );
+      const newAmount = amountArray.filter(expense => expense.length !== 0);
+      const finalAmount = newAmount.filter(expense => {
+        return expense[0].amount !== null;
+      });
+
+      const dates = finalAmount.filter(expense => {
+        return expense[0].created_at.includes(this.props.dateNum);
+      });
+
+      const newNew = dates.map(expense => {
+        return expense[0].amount;
+      });
+      const sum = newNew.reduce((a, b) => a + b, 0);
+      return sum;
+    } else {
+      return 0;
+    }
+  };
+
 
   render() {
     return (
@@ -353,6 +416,7 @@ class App extends Component {
               user={this.state.user}
               existingUser={this.state.existingUser}
               newUser={this.state.newUser}
+              saveGoal={this.saveGoal}
             />
           )}
         />
@@ -426,6 +490,15 @@ class App extends Component {
             <ExpenseInput handleSubmitCategory={this.handleSubmitCategory} />
           )}
         />
+
+<Route
+          exact
+          path="/insights"
+          render={() => (
+            <InsightsPage/>
+          )}
+        />
+
       </div>
     );
   }
