@@ -8,13 +8,18 @@ import {
   Grid,
   Segment,
   List,
-  Button, Icon
+  Button,
+  Icon
 } from "semantic-ui-react";
 import {
   BrowserRouter as Router,
   Redirect,
-  withRouter
+  withRouter,
+  Link
 } from "react-router-dom";
+import ProgressBar from './ProgressBar'
+import InsightsPage from './InsightsPage'
+
 
 const COLORS = ["#FFDAB9", "#FFA07A", "#FFBB28", "#FF8042"];
 
@@ -74,7 +79,25 @@ class ProfilePageNew extends React.Component {
     }
   };
 
+  //   totalSavedToGoal=()=>{
+  // if (this.totalAmount()> this.props.user.budget){
+  //     alert(
+  //         "You are over your budget for the month"
+  //       )}else{
+  //           return <GoalCard amountSaved={this.amountSaved} totalAmount={this.totalAmount()} user={this.props.user}/>
+  //       }
+  // }
+
+
+  amountSaved = () => {
+    const monthlyIncome = this.props.user.income / 12;
+    const saved = monthlyIncome - this.totalAmount();
+    const savedPercent = (saved / this.props.user.goals) * 100;
+    return <ProgressBar percentage={savedPercent} />;
+  };
+
   render() {
+
     const data = [
       {
         name: "left",
@@ -110,25 +133,27 @@ class ProfilePageNew extends React.Component {
 
     return (
       <>
- 
-      <Menu icon="labeled" vertical compact size="mini" className="account">
-      <Menu.Item onClick={() => (window.location = "/newprofile")}
+        <Menu icon="labeled" vertical compact size="mini" className="account">
+          <Menu.Item
+            onClick={() => (window.location = "/settings")}
             active="user"
-          name="user"
-          > <Icon align= "right" color="black" name="user"/> Profile
+            name="user"
+          >
+            {" "}
+            <Icon align="right" color="black" name="setting" /> Settings
           </Menu.Item>
-          <Menu.Item onClick={() => (window.location = "/settings")}
-            active="user"
-          name="user"
-          > <Icon align= "right" color="black" name="setting"/> Settings
+          <Menu.Item onClick={this.props.logOut} active="user" name="settings">
+            {" "}
+            <Icon
+              onClick={this.props.logOut}
+              align="right"
+              color="black"
+              name="log out"
+            />{" "}
+            Log out
           </Menu.Item>
-          <Menu.Item  onClick={this.props.logOut}
-            active="user"
-          name="settings"
-          > <Icon onClick={this.props.logOut}align= "right" color="black" name="log out"/> Log out
-          </Menu.Item>
-      </Menu>
- 
+        </Menu>
+
         <Container>
           <PieChart class="left recharts-wrapper" width={400} height={400}>
             <Pie
@@ -150,113 +175,116 @@ class ProfilePageNew extends React.Component {
             </Pie>
           </PieChart>
         </Container>
-<div className="profile">
-        <h1 class="thick icon">{this.props.date}</h1>
-        <div class="month">
-          <Menu compact>
-            <select onChange={this.props.changeDate} id="gMonth1">
-              <option value=""> --Select Month--</option>
-              <option name="January" value="1">
-                January
-              </option>
-              <option name="February" value="2">
-                February
-              </option>
-              <option name="March" value="3">
-                March
-              </option>
-              <option name="April" value="4">
-                April
-              </option>
-              <option name="May" value="5">
-                May
-              </option>
-              <option name="June" value="6">
-                June
-              </option>
-              <option name="July" value="7">
-                July
-              </option>
-              <option name="August" value="8">
-                August
-              </option>
-              <option name="September" value="9">
-                September
-              </option>
-              <option name="October" value="10">
-                October
-              </option>
-              <option name="November" value="11">
-                November
-              </option>
-              <option name="December" value="12">
-                December
-              </option>
-            </select>
-          </Menu>
-        </div>
-        <h3></h3>
-        <div onClick={() => (window.location = "/budgetoptions")}>
-          <Segment>
-            <Grid columns={2} relaxed="very">
-              <Grid.Column>
-                <p>Monthly Budget</p>
-                <p>
-                  {" "}
-                  {this.props.budgetFilled ? (
-                    <>
-                      <p>{this.props.user.budget}</p> <p>Tap to edit</p>
-                    </>
-                  ) : (
-                    <p>Tap to set</p>
-                  )}
-                </p>
-              </Grid.Column>
-              <Grid.Column>
-                <p>Remaining Budget</p>
-                <p>
-                  {" "}
-                  {this.props.budgetFilled ? (
-                    <>
-                      {" "}
-                      <p>
-                        {this.props.user.budget - Number(this.totalAmount())}
-                      </p>{" "}
-                      <p>Tap to edit</p>{" "}
-                    </>
-                  ) : (
-                    <p>Tap to set</p>
-                  )}
-                </p>
-              </Grid.Column>
-            </Grid>
-            <Divider vertical>And</Divider>
-          </Segment>
+        <div className="profile">
+          <h1 class="thick icon">{this.props.date}</h1>
+          <div class="month">
+            <Menu compact>
+              <select onChange={this.props.changeDate} id="gMonth1">
+                <option value=""> --Select Month--</option>
+                <option name="January" value="1">
+                  January
+                </option>
+                <option name="February" value="2">
+                  February
+                </option>
+                <option name="March" value="3">
+                  March
+                </option>
+                <option name="April" value="4">
+                  April
+                </option>
+                <option name="May" value="5">
+                  May
+                </option>
+                <option name="June" value="6">
+                  June
+                </option>
+                <option name="July" value="7">
+                  July
+                </option>
+                <option name="August" value="8">
+                  August
+                </option>
+                <option name="September" value="9">
+                  September
+                </option>
+                <option name="October" value="10">
+                  October
+                </option>
+                <option name="November" value="11">
+                  November
+                </option>
+                <option name="December" value="12">
+                  December
+                </option>
+              </select>
+            </Menu>
+          </div>
           <h3></h3>
-        </div>
-        {this.props.expensesFilled ? (
-          <>
-            {" "}
-            {expenseCard}{" "}
-            <List>
+          <div onClick={() => (window.location = "/budgetoptions")}>
+            <Segment>
+              <Grid columns={2} relaxed="very">
+                <Grid.Column>
+                  <p>Monthly Budget</p>
+                  <p>
+                    {" "}
+                    {this.props.budgetFilled ? (
+                      <>
+                        <p>{this.props.user.budget}</p> <p>Tap to edit</p>
+                      </>
+                    ) : (
+                      <p>Tap to set</p>
+                    )}
+                  </p>
+                </Grid.Column>
+                <Grid.Column>
+                  <p>Remaining Budget</p>
+                  <p>
+                    {" "}
+                    {this.props.budgetFilled ? (
+                      <>
+                        {" "}
+                        <p>
+                          {this.props.user.budget - Number(this.totalAmount())}
+                        </p>{" "}
+                        <p>Tap to edit</p>{" "}
+                      </>
+                    ) : (
+                      <p>Tap to set</p>
+                    )}
+                  </p>
+                </Grid.Column>
+              </Grid>
+              <Divider vertical>And</Divider>
+            </Segment>
+
+          </div>
+          {this.props.expensesFilled ? (
+            <>
               {" "}
-              <List.Item>
-                <List.Content floated="right">
-                  <Button onClick={() => (window.location = "/newexpense")}>
-                    Add
-                  </Button>
-                </List.Content>
-                <List.Content className="icon left">
-                  Add Another Transaction
-                </List.Content>
-              </List.Item>{" "}
-            </List>{" "}
-          </>
-        ) : (
-          <Button onClick={() => (window.location = "/newexpense")}>
-            ADD YOUR FIRST TRANSACTION
-          </Button>
-        )}
+              {expenseCard}{" "}
+              <List>
+                {" "}
+                <List.Item>
+                  <List.Content floated="right">
+                    <Button onClick={() => (window.location = "/newexpense")}>
+                      Add
+                    </Button>
+                  </List.Content>
+                  <List.Content className="icon left font">
+                    Add Another Transaction
+                  </List.Content>
+                </List.Item>{" "}
+              </List>{" "}
+            </>
+          ) : (
+            <Button onClick={() => (window.location = "/newexpense")}>
+              ADD YOUR FIRST TRANSACTION
+            </Button>
+          )}
+        </div>
+        <div>
+            {this.amountSaved()}
         </div>
       </>
     );
