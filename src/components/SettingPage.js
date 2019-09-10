@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { List, Icon } from "semantic-ui-react";
 import {
-    BrowserRouter as Router,
   Link, 
     withRouter
   } from "react-router-dom"; 
@@ -36,7 +35,7 @@ class SettingPage extends Component {
             <List.Content>Delete Profile</List.Content>
           </List.Item>
         </List>
-        <Link  to="/newprofile"> <div> <Icon className="angle double left icon large inverted"></Icon> </div></Link> 
+        <Link  to="/profile"> <div> <Icon className="angle double left icon large inverted"></Icon> </div></Link> 
       </div>
     );
   }

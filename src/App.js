@@ -3,7 +3,6 @@ import API from "./adapters/API";
 import "./App.css";
 
 import {
-  BrowserRouter as Router,
   Route,
   Redirect,
   withRouter
@@ -19,7 +18,7 @@ import BudgetOptionsPage from "./components/BudgetOptionsPage";
 import NewExpense from "./components/NewExpense";
 import SettingPage from "./components/SettingPage";
 import ExpenseInput from "./components/ExpenseInput";
-import InsightsPage from "./components/InsightsPage";
+import NewIns from "./components/NewIns";
 const usersUrl = "http://localhost:3000/api/v1/users";
 const categoriesUrl = "http://localhost:3000/api/v1/categories";
 const expensesUrl = "http://localhost:3000/api/v1/expenses";
@@ -52,7 +51,9 @@ class App extends Component {
             categories: user.user.categories,
             budget: user.user.budget,
             goals: user.user.goals
-          }
+          },
+          budgetFilled: user.user.budget !== null ? true : false,
+          expensesFilled: user.user.categories.length !== 0 ? true : false
         });
       }
     });
@@ -66,9 +67,12 @@ class App extends Component {
           user_id: user.id,
           first_name: user.first_name,
           last_name: user.last_name,
-          income: user.income
+          income: user.income,
+          goals: null
         },
-        redirectSignUp: true
+        redirectSignUp: true,
+        budgetFilled: user.budget !== null ? true : false,
+        expensesFilled: user.categories.length !== 0 ? true : false
       });
     });
   };
@@ -86,7 +90,7 @@ class App extends Component {
           goals: user.goals
         },
         redirectSignIn: true,
-        budgetFilled: user.budget !== 0 ? true : false,
+        budgetFilled: user.budget !== null ? true : false,
         expensesFilled: user.categories.length !== 0 ? true : false
       })
     );
@@ -129,7 +133,6 @@ class App extends Component {
     )
       .then(response => response.json())
       .then(res => {
-        // debugger;
         this.setState(
           {
             user: {
@@ -140,7 +143,7 @@ class App extends Component {
               budget: res.budget,
               categories: res.categories,
               goals: res.goals
-            }, 
+            },
             budgetFilled: res.budget !== 0 ? true : false,
             expensesFilled: res.categories.length !== 0 ? true : false
           },
@@ -151,13 +154,13 @@ class App extends Component {
 
   renderRedirectSignIn = () => {
     if (this.state.redirectSignIn) {
-      return <Redirect to="/newprofile" />;
+      return <Redirect to="/profile" />;
     }
   };
 
   renderRedirectSignUp = () => {
     if (this.state.redirectSignUp) {
-      return <Redirect to="/newprofile" />;
+      return <Redirect to="/profile" />;
     }
   };
 
@@ -199,11 +202,11 @@ class App extends Component {
       .then(() => this.fetchUserInfo())
       .then(
         this.setState({
-          budgetFilled: true,
+          budgetFilled: this.state.user.budget !== null ? true : false,
           expensesFilled: this.state.user.categories.length !== 0 ? true : false
         })
       )
-      .then(() => this.props.history.push(`/newprofile`));
+      .then(() => this.props.history.push(`/profile`));
   };
 
   handleSubmitCategory = (event, category, expense) => {
@@ -242,7 +245,7 @@ class App extends Component {
       {
         expensesFilled: true
       },
-      () => this.props.history.push("/newprofile")
+      () => this.props.history.push("/profile")
     );
   };
 
@@ -281,14 +284,14 @@ class App extends Component {
           income: Number(e.target.income.value),
           budget: this.state.user.budget,
           goals: this.state.user.goals,
-          budgetFilled: this.state.user.budget !== 0 ? true : false,
+          budgetFilled: this.state.user.budget !== null ? true : false,
           expensesFilled: this.state.user.categories.length !== 0 ? true : false
         })
       }
     )
       .then(response => response.json())
       .then(() => this.fetchUserInfo())
-      .then(() => this.props.history.push(`/newprofile`));
+      .then(() => this.props.history.push(`/profile`));
   };
 
   editCategory = (event, category) => {
@@ -343,7 +346,7 @@ class App extends Component {
         body: JSON.stringify({
           income: this.state.user.income,
           budget: this.state.user.budget,
-          goals: Number(event.target.goal.value),
+          goals: Number(event.target.goal.value)
         })
       }
     )
@@ -352,7 +355,7 @@ class App extends Component {
   };
 
   totalAmount = () => {
-    if (this.state.expensesFilled == true) {
+    if (this.state.expensesFilled === true) {
       const amountArray = this.state.user.categories.map(
         category => category.expenses
       );
@@ -374,7 +377,6 @@ class App extends Component {
       return 0;
     }
   };
-
 
   render() {
     return (
@@ -414,8 +416,6 @@ class App extends Component {
             <BudgetCalculator
               setBudget={this.setBudget}
               user={this.state.user}
-              existingUser={this.state.existingUser}
-              newUser={this.state.newUser}
               saveGoal={this.saveGoal}
             />
           )}
@@ -428,8 +428,6 @@ class App extends Component {
             <CreateOwnBudgetForm
               setBudget={this.setBudget}
               user={this.state.user}
-              fetchUserInfo={this.state.fetchUserInfo}
-              newUser={this.state.newUser}
             />
           )}
         />
@@ -447,7 +445,7 @@ class App extends Component {
 
         <Route
           exact
-          path="/newprofile"
+          path="/profile"
           render={() => (
             <ProfilePageNew
               logOut={this.logOut}
@@ -491,14 +489,13 @@ class App extends Component {
           )}
         />
 
-<Route
+        <Route
           exact
           path="/insights"
           render={() => (
-            <InsightsPage/>
+            <NewIns date={this.state.date} dateNum={this.state.dateNum} user={this.state.user} />
           )}
         />
-
       </div>
     );
   }

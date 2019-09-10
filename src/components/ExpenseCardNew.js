@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { List, Button} from "semantic-ui-react";
 
 import {
-  BrowserRouter as Router,
   withRouter
 } from "react-router-dom";
 
@@ -14,7 +13,7 @@ class ExpenseCardNew extends Component {
   getExpenses = () => {
     if (
       this.props.category.expenses.length !== 0 ||
-      this.props.category.expenses[0] == undefined
+      this.props.category.expenses[0] === undefined
     ) {
       return this.props.category.expenses[0].amount;
     } else {

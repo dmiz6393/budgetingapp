@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Dropdown, Form } from 'semantic-ui-react'
+import { Dropdown, Form, Menu, Icon } from 'semantic-ui-react'
 import {Link} from "react-router-dom"
 import bus from "../Icons/bus.jpg"
 import bills from "../Icons/bills.jpg"
@@ -110,6 +110,18 @@ class NewExpense extends Component {
     render() {  
       return (
           <>
+          <Menu icon="labeled" vertical compact size="mini" className="account">
+          
+          <Menu.Item 
+              onClick={() => (window.location = "/profile")}
+              active="user"
+              name="user"
+            >
+              {" "}
+              <Icon align="right" color="black" name="user" /> My profile
+            </Menu.Item>
+            </Menu>  
+            <h1> </h1>
         <div className= "form-container">
             <Form onSubmit={(e)=>this.props.handleSubmitCategory(e, this.state.category, this.state.expense)} size="large">
                 <div className="width">

@@ -4,9 +4,12 @@
   "private": true,
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^5.10.2",
+    "apexcharts": "^3.8.6",
     "d3": "^5.11.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-google-charts": "^3.0.15",
+    "react-horizontal-stacked-bar-chart": "^8.13.1",
     "react-minimal-pie-chart": "^5.0.0",
     "react-native-progress": "^3.6.0",
     "react-router-dom": "^5.0.1",

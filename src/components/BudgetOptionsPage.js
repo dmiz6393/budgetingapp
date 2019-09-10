@@ -1,12 +1,24 @@
 import React, { Component } from "react";
-import {Icon} from "semantic-ui-react";
+import {Icon, Menu} from "semantic-ui-react";
 
-import { BrowserRouter as Router, Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 class BudgetOptionsPage extends Component {
   render() {
     return (
         <>
+        <Menu icon="labeled" vertical compact size="mini" className="account">
+          
+          <Menu.Item 
+              onClick={() => (window.location = "/profile")}
+              active="user"
+              name="user"
+            >
+              {" "}
+              <Icon align="right" color="black" name="user" /> My profile
+            </Menu.Item>
+            </Menu> 
+            <h1> </h1>
       <div onClick={() => (window.location = "/budget")}>
        <Icon className="icon calculator huge"></Icon>
        <h1 className="icon">Calculate my budget</h1>

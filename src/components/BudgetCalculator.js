@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Form, Button, Container } from "semantic-ui-react";
 
-import { BrowserRouter as Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 class BudgetCalculator extends Component {
   state = {

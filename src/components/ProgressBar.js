@@ -7,10 +7,8 @@ const ProgressBar = props => {
     <Progress inverted color='white' size="small" percent={props.percentage} active> 
   Progress to your goal
     </Progress>
-    <div onClick={() => (window.location = "/insights")} >
-        <h5>See more insights here >></h5>
     </div>
-    </div>
+   
   );
 }
 

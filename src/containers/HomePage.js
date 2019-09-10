@@ -8,8 +8,8 @@ class HomePage extends Component {
       <div className="header front-page">
          <h1></h1>
          <img src={background} alt="background"/>
-         <button class="ui color5 button" onClick={() => (window.location = "/signin")}>Sign In</button>
-        <button class="ui color5 button" onClick={() => (window.location = "/signup")}>Sign Up</button>
+         <button className="ui color5 button" onClick={() => (window.location = "/signin")}>Sign In</button>
+        <button className="ui color5 button" onClick={() => (window.location = "/signup")}>Sign Up</button>
       <h1></h1>
       </div>
      
