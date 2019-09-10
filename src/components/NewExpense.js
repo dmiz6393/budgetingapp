@@ -101,7 +101,7 @@ class NewExpense extends Component {
 
     formFieldChange=(event)=>{
         this.setState({
-            expense: event.target.value
+            expense: event.target.expense.value
         })
   
 }

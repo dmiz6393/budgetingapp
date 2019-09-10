@@ -97,7 +97,7 @@ class ProfilePageNew extends React.Component {
 
     const expenseCard =
       this.props.user !== null
-        ? this.props.user.categories === undefined
+        ? this.props.user.categories == undefined
           ? null
           : this.props.user.categories
               .filter(category => {
@@ -285,7 +285,6 @@ class ProfilePageNew extends React.Component {
                         </Button>
                       </List.Content>
                       <List.Content
-                        style={{ margin: "0px" }}
                         className="icon left font"
                       >Add Another Transaction
                       </List.Content>
