@@ -21,7 +21,7 @@ import ExpenseInput from "./components/ExpenseInput";
 import NewIns from "./components/NewIns";
 const usersUrl = "https://budgey-app.herokuapp.com/api/v1/users";
 const categoriesUrl = "https://budgey-app.herokuapp.com/api/v1/categories";
-const expensesUrl = "http://localhost:3000/api/v1/expenses";
+const expensesUrl = "https://budgey-app.herokuapp.com/api/v1/expenses";
 const now = new Date();
 const year = now.getFullYear();
 
