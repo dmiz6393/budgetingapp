@@ -34,30 +34,31 @@ class App extends Component {
     expensesFilled: false
   };
 
-  // componentDidMount() {
-  //   this.getMonth();
-  //   API.validateUser().then(user => {
-  //     console.log(user);
-  //     if (user.user) {
-  //       this.setState({
-  //         user: {
-  //           email: user.user.email,
-  //           user_id: user.user.id,
-  //           income: user.user.income,
-  //           first_name: user.user.first_name,
-  //           categories: user.user.categories,
-  //           budget: user.user.budget,
-  //           goals: user.user.goals
-  //         },
-  //         budgetFilled: user.user.budget !== null ? true : false,
-  //         expensesFilled: user.user.categories.length !== 0 ? true : false
-  //       });
-  //     }
-  //   });
-  // }
+  componentDidMount() {
+    this.getMonth();
+    API.validateUser().then(user => {
+      console.log(user);
+      if (user.user) {
+        this.setState({
+          user: {
+            email: user.user.email,
+            user_id: user.user.id,
+            income: user.user.income,
+            first_name: user.user.first_name,
+            categories: user.user.categories,
+            budget: user.user.budget,
+            goals: user.user.goals
+          },
+          budgetFilled: user.user.budget !== null ? true : false,
+          expensesFilled: user.user.categories.length !== 0 ? true : false
+        });
+      }
+    });
+  }
 
   submitSignUp = user => {
     API.signUpUser(user).then(data => {
+      debugger;
       if (data.user) {
         const user = data.user;
         this.setState({
