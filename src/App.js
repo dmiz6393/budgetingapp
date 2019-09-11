@@ -17,6 +17,7 @@ import ExpenseInput from "./components/ExpenseInput";
 import NewIns from "./components/NewIns";
 import ProgressBar from "./components/ProgressBar";
 const usersUrl = "https://budgey-app.herokuapp.com/api/v1/users";
+const profileUrl = "https://budgey-app.herokuapp.com/api/v1/profile";
 const categoriesUrl = "https://budgey-app.herokuapp.com/api/v1/categories";
 const expensesUrl = "https://budgey-app.herokuapp.com/api/v1/expenses";
 const now = new Date();
@@ -125,15 +126,9 @@ class App extends Component {
   };
 
   fetchUserInfo = (callback = () => {}) => {
-    fetch(
-      usersUrl +
-        "/" +
-        `${
-          this.state.user.user_id !== undefined
-            ? this.state.user.user_id
-            : this.state.user.id
-        }`
-    )
+    fetch(profileUrl, {
+      headers: { Authorization: localStorage.get("token") }
+    })
       .then(response => response.json())
       .then(res => {
         this.setState(
@@ -181,26 +176,17 @@ class App extends Component {
 
   setBudget = (e, budget) => {
     e.preventDefault();
-    fetch(
-      usersUrl +
-        "/" +
-        `${
-          this.state.user.user_id !== undefined
-            ? this.state.user.user_id
-            : this.state.user.id
-        }`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          income: this.state.user.income,
-          budget: budget,
-          goals: this.state.user.goals
-        })
-      }
-    )
+    fetch(profileUrl, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        income: this.state.user.income,
+        budget: budget,
+        goals: this.state.user.goals
+      })
+    })
       .then(response => response.json())
       .then(() => this.fetchUserInfo())
       .then(
@@ -270,28 +256,20 @@ class App extends Component {
 
   updateIncome = e => {
     e.preventDefault();
-    return fetch(
-      usersUrl +
-        "/" +
-        `${
-          this.state.user.user_id !== undefined
-            ? this.state.user.user_id
-            : this.state.user.id
-        }`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          income: Number(e.target.income.value),
-          budget: this.state.user.budget,
-          goals: this.state.user.goals,
-          budgetFilled: this.state.user.budget !== null ? true : false,
-          expensesFilled: this.state.user.categories.length !== 0 ? true : false
-        })
-      }
-    )
+    return fetch(profileUrl, {
+      method: "PATCH",
+      headers: {
+        Authorization: localStorage.get("token"),
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        income: Number(e.target.income.value),
+        budget: this.state.user.budget,
+        goals: this.state.user.goals,
+        budgetFilled: this.state.user.budget !== null ? true : false,
+        expensesFilled: this.state.user.categories.length !== 0 ? true : false
+      })
+    })
       .then(response => response.json())
       .then(() => this.fetchUserInfo())
       .then(() => this.props.history.push(`/profile`));
@@ -334,16 +312,10 @@ class App extends Component {
 
   saveGoal = event => {
     return fetch(
-      usersUrl +
-        "/" +
-        `${
-          this.state.user.user_id !== undefined
-            ? this.state.user.user_id
-            : this.state.user.id
-        }`,
-      {
+      profileUrl, {
         method: "PATCH",
         headers: {
+          Authorization: localStorage.get("token"),
           "Content-Type": "application/json"
         },
         body: JSON.stringify({

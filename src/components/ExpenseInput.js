@@ -1,47 +1,64 @@
 import React, { Component } from "react";
-import { Form, Button } from 'semantic-ui-react'
+import { Form, Button } from "semantic-ui-react";
 
 class ExpenseInput extends Component {
-  state= {
-category: null, 
-expense: null 
-  }
+  state = {
+    category: null,
+    expense: null
+  };
 
-  formFieldChangeExpense=(event)=>{
-    event.preventDefault() 
+  formFieldChangeExpense = event => {
+    event.preventDefault();
 
-this.setState({  
-  expense: event.target.value
-  })
-  }
+    this.setState({
+      expense: event.target.value
+    });
+  };
 
-  formFieldChangeCategory=(event)=>{
-    event.preventDefault() 
+  formFieldChangeCategory = event => {
+    event.preventDefault();
 
-this.setState({  
-  category: event.target.value
-  })
-  }
+    this.setState({
+      category: event.target.value
+    });
+  };
 
   render() {
-      return (
-        <div >
-       <Form className="form-container" onSubmit={ (event)=> this.props.handleSubmitCategory(event,this.state.category,this.state.expense)}>
-       <Form.Field className="width" onChange={this.formFieldChangeExpense}
-                    control="input"
-                    type="number"
-                    placeholder="$0.0"
-                    name="expense"
-                    style={{ marginLeft: 90}}
-                />
-           <Form.Field onChange= {this.formFieldChangeCategory}  name="category" type="text"  control="input" placeholder="Category name"/>
-       <Button> Submit </Button>
-       </Form>
-        </div>
-      );
-    }
+    return (
+      <div>
+        <Form
+          className="form-container"
+          onSubmit={event =>
+            this.props.handleSubmitCategory(
+              event,
+              this.state.category,
+              this.state.expense
+            )
+          }
+        >
+          <Form.Field
+            className="width"
+            onChange={this.formFieldChangeExpense}
+            control="input"
+            type="number"
+            placeholder="$0.0"
+            name="expense"
+            style={{ marginLeft: 90 }}
+          />
+          <Form.Field
+            onChange={this.formFieldChangeCategory}
+            name="category"
+            type="text"
+            control="input"
+            placeholder="Category name"
+          />
+          <Button> Submit </Button>
+        </Form>
+      </div>
+    );
   }
-  
-  export default ExpenseInput;
-  
-  //event,category,expense 
+}
+
+export default ExpenseInput;
+
+//event,category,expense
