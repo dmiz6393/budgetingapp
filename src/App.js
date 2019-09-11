@@ -58,7 +58,6 @@ class App extends Component {
 
   submitSignUp = user => {
     API.signUpUser(user).then(data => {
-      debugger;
       if (data.user) {
         const user = data.user;
         this.setState({
