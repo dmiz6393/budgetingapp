@@ -91,9 +91,9 @@ class App extends Component {
           categories: user.categories,
           goals: user.goals
         },
-        redirectSignIn: true,
         budgetFilled: user.budget !== null ? true : false,
-        expensesFilled: user.categories.length !== 0 ? true : false
+        expensesFilled: user.user.categories.length !== 0 ? true : false, 
+        redirectSignIn: true
       })
     );
   };
