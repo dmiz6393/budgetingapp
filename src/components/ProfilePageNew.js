@@ -71,12 +71,12 @@ class ProfilePageNew extends React.Component {
     }
   };
 
-  amountSaved = () => {
-    const monthlyIncome = this.props.user.income / 12;
-    const saved = monthlyIncome - this.totalAmount();
-    const savedPercent = (saved / this.props.user.goals) * 100;
-    return <ProgressBar percentage={savedPercent} />;
-  };
+//   amountSaved = () => {
+//     const monthlyIncome = this.props.user.income / 12;
+//     const saved = monthlyIncome - this.totalAmount();
+//     const savedPercent = (saved / this.props.user.goals) * 100;
+//     return <ProgressBar percentage={savedPercent} />;
+//   };
 
   render() {
     const data =
