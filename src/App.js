@@ -127,7 +127,7 @@ class App extends Component {
 
   fetchUserInfo = (callback = () => {}) => {
     fetch(profileUrl, {
-      headers: { Authorization: localStorage.get("token") }
+      headers: { Authorization: localStorage.getItem("token") }
     })
       .then(response => response.json())
       .then(res => {
