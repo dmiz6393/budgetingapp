@@ -125,8 +125,6 @@ class ProfilePageNew extends React.Component {
           <div>
             <Menu
               icon="labeled"
-              vertical
-              compact
               size="mini"
               className="account"
             >
@@ -189,7 +187,7 @@ class ProfilePageNew extends React.Component {
               <div class="month">
                 <Menu compact>
                   <select onChange={this.props.changeDate} id="gMonth1">
-                    <option value=""> --Select Month--</option>
+                    <option> --Select Month--</option>
                     <option name="January" value="1">
                       January
                     </option>
@@ -277,16 +275,15 @@ class ProfilePageNew extends React.Component {
                   <List>
                     {" "}
                     <List.Item>
-                      <List.Content floated="right">
+                      <List.Content floated="center">
                         <Button
                           onClick={() => (window.location = "/newexpense")}
                         >
                           Add
                         </Button>
                       </List.Content>
-                      <List.Content
-                        className="icon left font"
-                      >Add Another Transaction
+                      <List.Content className="icon font">
+                        Add Another Transaction
                       </List.Content>
                     </List.Item>
                   </List>{" "}
@@ -298,11 +295,6 @@ class ProfilePageNew extends React.Component {
               )}
             </div>
             <div>
-              {this.props.user.goals !== null ? (
-                this.amountSaved()
-              ) : (
-                <div></div>
-              )}
             </div>
           </div>
         )}

@@ -1,4 +1,4 @@
-const endpoint = `https://budgey-app.herokuapp.com/api/v1`;
+const endpoint = `http://localhost:3000/api/v1`;
 const signupURL = `${endpoint}/users`;
 const loginURL = `${endpoint}/login`;
 const validateURL = `${endpoint}/validate`;
@@ -16,7 +16,7 @@ const jsonify = resp => {
   
   const saveToken = data => {
     localStorage.setItem("token", data.jwt);
-    return data.user;
+    return data;
   };
   
   const handleServerError = response => {

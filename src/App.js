@@ -2,11 +2,7 @@ import React, { Component } from "react";
 import API from "./adapters/API";
 import "./App.css";
 
-import {
-  Route,
-  Redirect,
-  withRouter
-} from "react-router-dom";
+import { Route, Redirect, withRouter } from "react-router-dom";
 import SignInForm from "./components/SignInForm";
 import SignUpForm from "./components/SignUpForm";
 import HomePage from "./containers/HomePage";
@@ -19,9 +15,10 @@ import NewExpense from "./components/NewExpense";
 import SettingPage from "./components/SettingPage";
 import ExpenseInput from "./components/ExpenseInput";
 import NewIns from "./components/NewIns";
-const usersUrl = "https://budgey-app.herokuapp.com/api/v1/users";
-const categoriesUrl = "https://budgey-app.herokuapp.com/api/v1/categories";
-const expensesUrl = "https://budgey-app.herokuapp.com/api/v1/expenses";
+import ProgressBar from "./components/ProgressBar";
+const usersUrl = "http://localhost:3000/api/v1/users";
+const categoriesUrl = "http://localhost:3000/api/v1/categories";
+const expensesUrl = "http://localhost:3000/api/v1/expenses";
 const now = new Date();
 const year = now.getFullYear();
 
@@ -60,20 +57,26 @@ class App extends Component {
   }
 
   submitSignUp = user => {
-    API.signUpUser(user).then(user => {
-      this.setState({
-        user: {
-          email: user.email,
-          user_id: user.id,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          income: user.income,
-          goals: null
-        },
-        redirectSignUp: true,
-        budgetFilled: user.budget !== null ? true : false,
-        expensesFilled: user.categories.length !== 0 ? true : false
-      });
+    API.signUpUser(user).then(data => {
+      debugger;
+      if (data.user) {
+        const user = data.user;
+        this.setState({
+          user: {
+            email: user.email,
+            user_id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            income: user.income,
+            goals: null
+          },
+          redirectSignUp: true,
+          budgetFilled: user.budget !== null ? true : false,
+          expensesFilled: user.categories.length !== 0 ? true : false
+        });
+      } else {
+        window.alert(data.messages);
+      }
     });
   };
 
@@ -378,6 +381,13 @@ class App extends Component {
     }
   };
 
+  amountSaved = () => {
+    const monthlyIncome = this.state.user.income / 12;
+    const saved = monthlyIncome - this.totalAmount();
+    const savedPercent = (saved / this.state.user.goals) * 100;
+    return <ProgressBar percentage={savedPercent} />;
+  };
+
   render() {
     return (
       <div className="App">
@@ -493,7 +503,12 @@ class App extends Component {
           exact
           path="/insights"
           render={() => (
-            <NewIns date={this.state.date} dateNum={this.state.dateNum} user={this.state.user} />
+            <NewIns
+              amountSaved={this.amountSaved}
+              date={this.state.date}
+              dateNum={this.state.dateNum}
+              user={this.state.user}
+            />
           )}
         />
       </div>

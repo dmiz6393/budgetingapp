@@ -9,8 +9,9 @@ class EditIncome extends Component {
   render() {
     return (
       <div className="form-container">
-        <h1 className="icon"> Type your new income below</h1>
+
         <Form onSubmit={this.props.updateIncome}>
+        <label className="icon income"> <h1>Type your new income below</h1></label>
           <input name="income" type="number" placeholder="$"  />
           <h3> </h3>
           <Button type="submit" > Submit</Button> 

@@ -3,13 +3,19 @@ import { Progress } from "semantic-ui-react";
 
 const ProgressBar = props => {
   return (
+      <>
+        <h1 className="icon">Progress to your goal</h1>
     <div>
-    <Progress inverted color='white' size="small" percent={props.percentage} active> 
-  Progress to your goal
-    </Progress>
+          
+      <Progress 
+        progress
+        size="large"
+        percent={props.percentage.toFixed()}
+      >
+      </Progress>
     </div>
-   
+    </>
   );
-}
+};
 
 export default ProgressBar;
