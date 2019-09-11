@@ -110,18 +110,7 @@ class NewExpense extends Component {
     render() {  
       return (
           <>
-          <Menu icon="labeled" vertical compact size="mini" className="account">
-          
-          <Menu.Item 
-              onClick={() => (window.location = "/profile")}
-              active="user"
-              name="user"
-            >
-              {" "}
-              <Icon align="right" color="black" name="user" /> My profile
-            </Menu.Item>
-            </Menu>  
-            <h1> </h1>
+
         <div className= "form-container">
             <Form onSubmit={(e)=>this.props.handleSubmitCategory(e, this.state.category, this.state.expense)} size="large">
                 <div className="width">

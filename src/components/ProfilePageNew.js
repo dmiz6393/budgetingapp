@@ -48,7 +48,10 @@ class ProfilePageNew extends React.Component {
   };
 
   totalAmount = () => {
-    if (this.props.expensesFilled === true && this.props.user.categories!==undefined) {
+    if (
+      this.props.expensesFilled === true &&
+      this.props.user.categories !== undefined
+    ) {
       const amountArray = this.props.user.categories.map(
         category => category.expenses
       );
@@ -112,15 +115,12 @@ class ProfilePageNew extends React.Component {
 
     return (
       <>
-        {this.props.user === null || this.props.user.categories === undefined ? (
+        {this.props.user === null ||
+        this.props.user.categories === undefined ? (
           <h3> This page is loading </h3>
         ) : (
           <div>
-            <Menu
-              icon="labeled"
-              size="mini"
-              className="account"
-            >
+            <Menu icon="labeled" size="mini" className="account">
               <Menu.Item
                 onClick={() => (window.location = "/insights")}
                 active="user"
@@ -287,8 +287,7 @@ class ProfilePageNew extends React.Component {
                 </Button>
               )}
             </div>
-            <div>
-            </div>
+            <div></div>
           </div>
         )}
       </>

@@ -25,13 +25,14 @@ this.setState({
 
   render() {
       return (
-        <div className="form-container">
-       <Form onSubmit={ (event)=> this.props.handleSubmitCategory(event,this.state.category,this.state.expense)}>
+        <div >
+       <Form className="form-container" onSubmit={ (event)=> this.props.handleSubmitCategory(event,this.state.category,this.state.expense)}>
        <Form.Field className="width" onChange={this.formFieldChangeExpense}
                     control="input"
                     type="number"
                     placeholder="$0.0"
                     name="expense"
+                    style={{ marginLeft: 90}}
                 />
            <Form.Field onChange= {this.formFieldChangeCategory}  name="category" type="text"  control="input" placeholder="Category name"/>
        <Button> Submit </Button>

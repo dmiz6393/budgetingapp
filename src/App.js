@@ -80,7 +80,8 @@ class App extends Component {
   };
 
   submitSignIn = user => {
-    API.signInUser(user).then(user =>
+    API.signInUser(user).then(data => {
+      const user = data.user;
       this.setState({
         user: {
           first_name: user.first_name,
@@ -92,10 +93,10 @@ class App extends Component {
           goals: user.goals
         },
         budgetFilled: user.budget !== null ? true : false,
-        expensesFilled: user.user.categories.length !== 0 ? true : false, 
+        expensesFilled: user.categories.length !== 0 ? true : false,
         redirectSignIn: true
-      })
-    );
+      });
+    });
   };
 
   getMonth = () => {
