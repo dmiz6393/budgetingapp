@@ -259,7 +259,7 @@ class App extends Component {
     return fetch(profileUrl, {
       method: "PATCH",
       headers: {
-        Authorization: localStorage.get("token"),
+        Authorization: localStorage.getItem("token"),
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -315,7 +315,7 @@ class App extends Component {
       profileUrl, {
         method: "PATCH",
         headers: {
-          Authorization: localStorage.get("token"),
+          Authorization: localStorage.getItem("token"),
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
