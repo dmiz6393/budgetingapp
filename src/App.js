@@ -68,7 +68,8 @@ class App extends Component {
             first_name: user.first_name,
             last_name: user.last_name,
             income: user.income,
-            goals: null
+            goals: null, 
+            categories: []
           },
           redirectSignUp: true,
           budgetFilled: user.budget !== null ? true : false,
