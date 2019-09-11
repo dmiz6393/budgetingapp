@@ -48,7 +48,7 @@ class ProfilePageNew extends React.Component {
   };
 
   totalAmount = () => {
-    if (this.props.expensesFilled === true) {
+    if (this.props.expensesFilled === true && this.props.user.categories!==undefined) {
       const amountArray = this.props.user.categories.map(
         category => category.expenses
       );
@@ -70,13 +70,6 @@ class ProfilePageNew extends React.Component {
       return 0;
     }
   };
-
-//   amountSaved = () => {
-//     const monthlyIncome = this.props.user.income / 12;
-//     const saved = monthlyIncome - this.totalAmount();
-//     const savedPercent = (saved / this.props.user.goals) * 100;
-//     return <ProgressBar percentage={savedPercent} />;
-//   };
 
   render() {
     const data =
@@ -119,7 +112,7 @@ class ProfilePageNew extends React.Component {
 
     return (
       <>
-        {this.props.user === null ? (
+        {this.props.user === null || this.props.user.categories === undefined ? (
           <h3> This page is loading </h3>
         ) : (
           <div>
